@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-namespace Seminar1
+namespace Seminar2
 {
 	public class Massage
 	{
@@ -29,6 +29,14 @@ namespace Seminar1
         {
             return JsonSerializer.Deserialize<Massage>(massage);
         }
+
+        public override string ToString()
+        {
+            return $"Имя: {Name} " +
+                $"\nДата получения: {Date} " +
+                $"\nСообщение: {Text}\n";
+        }
+        
     }
 }
 

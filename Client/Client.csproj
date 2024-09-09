@@ -11,4 +11,7 @@
     <ProjectReference Include="..\Server\Server.csproj" />
     <ProjectReference Include="..\Seminar1\Seminar1.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2662" />
+  </ItemGroup>
 </Project>
