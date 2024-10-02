@@ -17,34 +17,29 @@ class Program
         UdpClient ucl = new UdpClient(12345);
         Console.WriteLine("Connecting");
 
-        
-
-        while (breakLoop)
+        CancellationTokenSource cts = new CancellationTokenSource();
+        while (!cts.IsCancellationRequested)
             {
             try
                 {
-                if (Console.KeyAvailable)
-                {
-                    ConsoleKeyInfo cki = Console.ReadKey(true);
-                    if (cki.Key != ConsoleKey.Escape)
-                    {
-                        ucl.Dispose();
-                        break;
-                    }
-                }
                 byte[] buffer = ucl.Receive(ref iPEndPoint);
                 string text = Encoding.UTF8.GetString(buffer);
 
                 Thread thread = new Thread(() =>
                 {
                     Massage? msgClient = Massage.FromJson(text);
-                    Console.WriteLine(Massage.FromJson(text).ToString());
-                    Console.WriteLine();
 
-                    Massage msgServer = new Massage("Server", DateTime.Now, "Сообщение доставлено");
-                    string js = msgServer.ToJSON();
-                    byte[] bytes = Encoding.UTF8.GetBytes(js);
-                    ucl.Send(bytes, iPEndPoint);
+                    if (msgClient.Text.ToLower().Contains("отмена"))
+                    {
+                        cts.Cancel();
+                    }
+                        Console.WriteLine(Massage.FromJson(text).ToString());
+                        Console.WriteLine();
+
+                        Massage msgServer = new Massage("Server", DateTime.Now, "Сообщение доставлено");
+                        string js = msgServer.ToJSON();
+                        byte[] bytes = Encoding.UTF8.GetBytes(js);
+                        ucl.Send(bytes, iPEndPoint);
                 });
                 thread.Start();
             }
@@ -53,10 +48,5 @@ class Program
                 Console.WriteLine(e.Message);
             }
         }
-    }
-
-    void keyPress(object sender, EventArgs args)
-    {
-        breakLoop = false;
     }
 }

@@ -15,17 +15,16 @@ class Program
         Console.WriteLine("Введите имя: ");
         string nikName = Console.ReadLine();
 
-        while (true)
+        bool work = true;
+        while (work)
         {
             try
             {
                 Console.WriteLine("Введите сообщение:");
                 string massageText = Console.ReadLine();
-                if(String.IsNullOrEmpty(massageText) || massageText.ToUpper() == "EXIT")
+                if(String.IsNullOrEmpty(massageText) || massageText.ToLower().Contains("отмена"))
                 {
-
-                    ucl.Client.Close();
-                    break;
+                    work = false;
                 }
                 Massage massage = new Massage(nikName,DateTime.Now,massageText);
                 string js = massage.ToJSON();
@@ -40,12 +39,15 @@ class Program
                 string js1 = proofOfIncom.ToJSON();
                 byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
                 ucl.Send(bytes1, iPEndPoint);
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+
         }
+        ucl.Close();
     }
 }
 
