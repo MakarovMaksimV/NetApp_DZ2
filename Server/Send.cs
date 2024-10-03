@@ -14,7 +14,6 @@ namespace Server
 
 		public void SendMassageRegistration(Massage msgServer,IPEndPoint iPEndPoint, UdpClient ucl)
 		{
-			PrototypePattern prototype = new PrototypePattern(msgServer);
             string js = msgServer.ToJSON();
             byte[] bytes = Encoding.UTF8.GetBytes(js);
             ucl.Send(bytes, iPEndPoint);
@@ -22,7 +21,6 @@ namespace Server
 
         public void SendMassageAll(Massage msgClient, UdpClient ucl, Dictionary<string, IPEndPoint> clients )
         {
-            
             foreach (var client in clients)
             {
                 msgClient.ToName = client.Key;
@@ -30,9 +28,7 @@ namespace Server
                 string js = msgClient.ToJSON();
                 byte[] bytes = Encoding.UTF8.GetBytes(js);
                 ucl.Send(bytes, client.Value);
-                Console.WriteLine("Клиенту" + msgClient.ToName.ToString());
             }
-            
         }
 
         public void SendMassageToClient(Massage msgClient, UdpClient ucl, IPEndPoint value)
