@@ -14,7 +14,14 @@ namespace Seminar2
             this.FromName = FromName;
             this.Date = Date;
             this.Text = Text;
+        }
+
+        public Massage(string FromName, DateTime Date, string Text, string ToName)
+        {
+            this.FromName = FromName;
+            this.Date = Date;
             this.Text = Text;
+            this.ToName = ToName;
         }
 
         public Massage()
@@ -34,7 +41,7 @@ namespace Seminar2
 
         public override string ToString()
         {
-            return $"Имя: {FromName} " +
+            return $"Получено от: {FromName} " +
                 $"\nДата получения: {Date} " +
                 $"\nСообщение: {Text}\n";
         }

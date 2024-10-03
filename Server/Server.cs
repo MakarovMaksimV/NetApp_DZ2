@@ -40,25 +40,12 @@ namespace Server
                         }
                         else if (msgClient.ToName.ToLower().Equals("all"))
                         {
-                            send.SendMassageAll(serMassage, msgClient, ucl, clients);
-
-                            //foreach (var client in clients)
-                            //{
-                            //    msgClient.ToName = client.Key;
-                            //    string js1 = msgClient.ToJSON();
-                            //    byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-                            //    ucl.Send(bytes1, client.Value);
-                            //}
-                            //msgServer = new Massage("Server", DateTime.Now, $"отправлено всем клиентам ");
+                            send.SendMassageAll(msgClient, ucl, clients);
                         }
 
                         else if (clients.TryGetValue(msgClient.FromName, out IPEndPoint value))
                         {
-                            send.SendMassageToClient(msgClient, ucl, msgServer, value);
-                            //string js1 = msgClient.ToJSON();
-                            //byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-                            //ucl.Send(bytes1, value);
-                            //msgClient = new Massage("Server", DateTime.Now, $"отправлено клиенту {msgServer.ToName} ");
+                            send.SendMassageToClient(msgClient, ucl, value);
                         }
                         else
                         {

@@ -20,24 +20,27 @@ namespace Server
             ucl.Send(bytes, iPEndPoint);
         }
 
-        public void SendMassageAll(Massage msgServer, Massage msgClient, UdpClient ucl, Dictionary<string, IPEndPoint> clients )
+        public void SendMassageAll(Massage msgClient, UdpClient ucl, Dictionary<string, IPEndPoint> clients )
         {
+            
             foreach (var client in clients)
             {
                 msgClient.ToName = client.Key;
-                string js1 = msgClient.ToJSON();
-                byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-                ucl.Send(bytes1, client.Value);
+                msgClient = new Massage(msgClient.FromName, DateTime.Now, $": {msgClient.Text},отправлено всем клиентам");
+                string js = msgClient.ToJSON();
+                byte[] bytes = Encoding.UTF8.GetBytes(js);
+                ucl.Send(bytes, client.Value);
+                Console.WriteLine("Клиенту" + msgClient.ToName.ToString());
             }
-            msgServer = new Massage("Server", DateTime.Now, $"отправлено всем клиентам ");
+            
         }
 
-        public void SendMassageToClient(Massage msgClient, UdpClient ucl, Massage msgServer, IPEndPoint value)
+        public void SendMassageToClient(Massage msgClient, UdpClient ucl, IPEndPoint value)
         {
-            string js1 = msgClient.ToJSON();
-            byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-            ucl.Send(bytes1, value);
-            msgClient = new Massage("Server", DateTime.Now, $"отправлено клиенту {msgServer.ToName} ");
+            msgClient = new Massage(msgClient.FromName, DateTime.Now, $": {msgClient.Text}, отправлено клиенту {msgClient.ToName} ");
+            string js = msgClient.ToJSON();
+            byte[] bytes = Encoding.UTF8.GetBytes(js);
+            ucl.Send(bytes, value);
         }
     }
 }
