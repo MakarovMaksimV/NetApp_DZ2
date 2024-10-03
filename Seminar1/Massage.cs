@@ -1,23 +1,25 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 namespace Seminar2
 {
 	public class Massage
 	{
-        public string Name { get; set; }
+        public string FromName { get; set; }
+        public string ToName { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }
 
-        public Massage(string Name, DateTime Date, string Text)
-		{
-            this.Name = Name;
+        public Massage(string FromName, DateTime Date, string Text)
+        {
+            this.FromName = FromName;
             this.Date = Date;
             this.Text = Text;
-		}
+            this.Text = Text;
+        }
 
         public Massage()
         {
         }
-
 
         public string ToJSON()
 		{
@@ -32,7 +34,7 @@ namespace Seminar2
 
         public override string ToString()
         {
-            return $"Имя: {Name} " +
+            return $"Имя: {FromName} " +
                 $"\nДата получения: {Date} " +
                 $"\nСообщение: {Text}\n";
         }

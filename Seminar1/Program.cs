@@ -1,4 +1,5 @@
-﻿namespace Seminar1;
+﻿
+namespace Seminar1;
 
 class Program
 {
