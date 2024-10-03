@@ -31,31 +31,34 @@ namespace Server
                         byte[] buffer = ucl.Receive(ref iPEndPoint);
                         Recive recive = new Recive();
                         msgClient = recive.ReciveMassage(buffer);
+                        Registration reg = new Registration();
+                        Massage serMassage = reg.ClientRegistration(msgClient, iPEndPoint, ref clients);
 
                         if (msgClient.ToName.ToLower().Equals("server"))
                         {
-                            Registration reg = new Registration();
-                            Massage serMassage = reg.ClientRegistration(msgClient, iPEndPoint, clients);
-                            send.SendMassage(serMassage, iPEndPoint, ucl);
+                            send.SendMassageRegistration(serMassage, iPEndPoint, ucl);
                         }
                         else if (msgClient.ToName.ToLower().Equals("all"))
                         {
-                            foreach (var client in clients)
-                            {
-                                msgClient.ToName = client.Key;
-                                string js1 = msgClient.ToJSON();
-                                byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-                                ucl.Send(bytes1, client.Value);
-                            }
-                            msgServer = new Massage("Server", DateTime.Now, $"отправлено всем клиентам ");
+                            send.SendMassageAll(serMassage, msgClient, ucl, clients);
+
+                            //foreach (var client in clients)
+                            //{
+                            //    msgClient.ToName = client.Key;
+                            //    string js1 = msgClient.ToJSON();
+                            //    byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
+                            //    ucl.Send(bytes1, client.Value);
+                            //}
+                            //msgServer = new Massage("Server", DateTime.Now, $"отправлено всем клиентам ");
                         }
 
                         else if (clients.TryGetValue(msgClient.FromName, out IPEndPoint value))
                         {
-                            string js1 = msgClient.ToJSON();
-                            byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
-                            ucl.Send(bytes1, value);
-                            msgClient = new Massage("Server", DateTime.Now, $"отправлено клиенту {msgServer.ToName} ");
+                            send.SendMassageToClient(msgClient, ucl, msgServer, value);
+                            //string js1 = msgClient.ToJSON();
+                            //byte[] bytes1 = Encoding.UTF8.GetBytes(js1);
+                            //ucl.Send(bytes1, value);
+                            //msgClient = new Massage("Server", DateTime.Now, $"отправлено клиенту {msgServer.ToName} ");
                         }
                         else
                         {
@@ -65,13 +68,6 @@ namespace Server
                         {
                             cts.Cancel();
                         }
-                        //Console.WriteLine(Massage.FromJson(text).ToString());
-                        Console.WriteLine();
-
-
-                        string js = msgServer.ToJSON();
-                        byte[] bytes = Encoding.UTF8.GetBytes(js);
-                        ucl.Send(bytes, iPEndPoint);
                     }
                     catch (Exception e)
                     {

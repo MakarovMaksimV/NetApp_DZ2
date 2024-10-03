@@ -12,7 +12,7 @@ namespace Server
 		{
 		}
 
-		public Massage ClientRegistration(Massage msgClient, IPEndPoint iPEndPoint, Dictionary<string,IPEndPoint> clients)
+		public Massage ClientRegistration(Massage msgClient, IPEndPoint iPEndPoint, ref Dictionary<string,IPEndPoint> clients)
 		{
             if (msgClient.Text.ToLower().Equals("reg"))
             {
